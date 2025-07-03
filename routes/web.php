@@ -12,7 +12,15 @@ Route::get('/', function () {
 Route::get('/index', [IndexController::class, 'index']);
 Route::get('/horoscope',[HoroscopeController::class, 'horoscope']);
 Route::get('/rizz_counter_graph', [RizzCounterController::class, 'rizzCounter']);
-Route::view('/year1', 'year1');
-Route::view('/year2', 'year2');
-Route::view('/year3', 'year3');
-Route::view('/year4', 'year4');
+Route::get('/year1', function () {
+    return view('main.year1');
+});
+Route::get('/year2', function () {
+    return view('main.year2');
+});
+Route::get('/year3', function () {
+    return view('main.year3');
+});
+Route::get('/year4', function () {
+    return view('main.year4');
+});
