@@ -45,10 +45,10 @@
                     // 'Rizz counter' and 'Horoscope' intentionally omitted
                 ];
                 $yearLinks = [
-                    'Year 1' => '',
-                    'Year 2' => '#',
-                    'Year 3' => '#',
-                    'Year 4' => '#',
+                    'Year 1' => '/year1',
+                    'Year 2' => '/year2',
+                    'Year 3' => '/year3',
+                    'Year 4' => '/year4',
                     'Rizz counter' => '/rizz_counter_graph',
                     'Horoscope' => '/horoscope',
                 ];
