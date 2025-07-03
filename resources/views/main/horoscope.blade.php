@@ -47,10 +47,10 @@
             </div>
             <nav class="flex-grow">
                 <ul class="text-white">
-                    <li><a href="#" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 1</a></li>
-                    <li><a href="#" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 2</a></li>
-                    <li><a href="#" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 3</a></li>
-                    <li><a href="#" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 4</a></li>
+                    <li><a href="/year1" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 1</a></li>
+                    <li><a href="/year2" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 2</a></li>
+                    <li><a href="/year3" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 3</a></li>
+                    <li><a href="/year4" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Year 4</a></li>
                     <li><a href="/rizz_counter_graph" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Rizz counter</a></li>
                     <li><a href="/horoscope" class="block p-4 bg-blue-600 hover:bg-blue-500 transition duration-200 ease-in-out">Horoscope</a></li>
                 </ul>
