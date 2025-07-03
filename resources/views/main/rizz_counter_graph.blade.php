@@ -58,7 +58,20 @@
                 </ul>
             </nav>
             <div class="sidebar-bottom-section">
-                <span class="text-lg">15:05</span>
+                <!-- In the sidebar-bottom-section -->
+                <span id="sidebar-clock" class="text-lg"></span>
+
+                <!-- Place this script just before </body> -->
+                <script>
+                    function updateClock() {
+                        const now = new Date();
+                        const hours = String(now.getHours()).padStart(2, '0');
+                        const minutes = String(now.getMinutes()).padStart(2, '0');
+                        document.getElementById('sidebar-clock').textContent = `${hours}:${minutes}`;
+                    }
+                    updateClock();
+                    setInterval(updateClock, 1000);
+                </script>
             </div>
         </div>
     </div>
