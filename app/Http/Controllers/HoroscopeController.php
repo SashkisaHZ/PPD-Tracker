@@ -38,4 +38,3 @@ class HoroscopeController extends Controller
         ]);
     }
 }
-
