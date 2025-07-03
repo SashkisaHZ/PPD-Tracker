@@ -38,10 +38,10 @@
             </div>
             @php
                 $yearProgress = [
-                    'Year 1' => 80,
-                    'Year 2' => 55,
-                    'Year 3' => 30,
-                    'Year 4' => 10,
+                    'Year 1' => 90,
+                    'Year 2' => 83,
+                    'Year 3' => 97,
+                    'Year 4' => 29,
                     // 'Rizz counter' and 'Horoscope' intentionally omitted
                 ];
                 $yearLinks = [
