@@ -56,7 +56,20 @@
                 </ul>
             </nav>
             <div class="sidebar-bottom-section">
-                <span class="text-lg">15:05</span>
+                <!-- In the sidebar-bottom-section -->
+                <span id="sidebar-clock" class="text-lg"></span>
+
+                <!-- Place this script just before </body> -->
+                <script>
+                    function updateClock() {
+                        const now = new Date();
+                        const hours = String(now.getHours()).padStart(2, '0');
+                        const minutes = String(now.getMinutes()).padStart(2, '0');
+                        document.getElementById('sidebar-clock').textContent = `${hours}:${minutes}`;
+                    }
+                    updateClock();
+                    setInterval(updateClock, 1000);
+                </script>
             </div>
         </div>
     </div>
@@ -85,10 +98,10 @@
             const quotes = [
                 "Today, the universe is on your side—embrace new beginnings.",
                 "A surprise encounter will bring joy and inspiration.",
-                "Trust your intuition; it will guide you to success.",
+                "Trust your intuition, it will guide you to success.",
                 "Your kindness will return to you in unexpected ways.",
                 "Opportunities are closer than they appear—stay alert.",
-                "Let go of worries; positive energy surrounds you.",
+                "Let go of worries, positive energy surrounds you.",
                 "A creative idea will spark progress in your journey.",
                 "Someone close will offer valuable support today.",
                 "Take a bold step—fortune favors the brave.",
