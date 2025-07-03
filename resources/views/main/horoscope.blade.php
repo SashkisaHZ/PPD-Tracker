@@ -43,7 +43,7 @@
     <div class="md:col-span-1 flex flex-col space-y-8">
         <div class="bg-blue-600 rounded-lg shadow-md overflow-hidden flex flex-col flex-grow">
             <div class="sidebar-top-section">
-                <span class="text-lg">Personal Overview</span>
+                <span class="text-lg"><a href="/index">Personal Overview</a></span>
             </div>
             <nav class="flex-grow">
                 <ul class="text-white">
