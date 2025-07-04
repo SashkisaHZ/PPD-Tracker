@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\HoroscopeController;
+use App\Http\Controllers\InteractPurposefullyController;
 use App\Http\Controllers\RizzCounterController;
+use App\Http\Controllers\Year2Controller;
+use App\Http\Controllers\Year3Controller;
+use App\Http\Controllers\Year4Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -24,16 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/index', [IndexController::class, 'index']);
     Route::get('/horoscope', [HoroscopeController::class, 'horoscope']);
     Route::get('/rizz_counter_graph', [RizzCounterController::class, 'rizzCounter']);
-    Route::get('/year1', function () {
-        return view('main.year1');
-    });
-    Route::get('/year2', function () {
-        return view('main.year2');
-    });
-    Route::get('/year3', function () {
-        return view('main.year3');
-    });
-    Route::get('/year4', function () {
-        return view('main.year4');
-    });
+    Route::get('/year1', [InteractPurposefullyController::class, 'index']);
+    Route::get('/year2', [Year2Controller::class, 'index']);
+    Route::get('/year3', [Year3Controller::class, 'index']);
+    Route::get('/year4', [Year4Controller::class, 'index']);
 });
