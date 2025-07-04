@@ -44,7 +44,7 @@ class InteractPurposefullyController extends Controller
             ],
         ];
 
-        return view('interact_purposefully_progress', [
+        return view('main.year1', [
             'elementsProgress' => $elementsProgress,
         ]);
     }
