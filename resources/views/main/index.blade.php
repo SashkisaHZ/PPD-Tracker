@@ -8,7 +8,7 @@
         <!-- Hello, Alexander Card -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="bg-blue-600 text-white p-4 text-lg font-semibold rounded-t-lg">
-                Hello, Alexander
+                Hello, {{ Auth::user()->name }}
             </div>
             <div class="p-6 h-48">
                 <!-- Content for Hello, Alexander card -->
