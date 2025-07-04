@@ -55,7 +55,7 @@
                     <li>
                         <a href="/year1"
                            class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('year1') ? 'sidebar-link-active' : '' }}">
-                            <span class="mr-2">🎓</span> Year 1
+                            <span class="mr-2">🤓</span> Year 1
                         </a>
                     </li>
                     <li>
@@ -79,7 +79,7 @@
                     <li>
                         <a href="/rizz_counter_graph"
                            class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('rizz_counter_graph') ? 'sidebar-link-active' : '' }}">
-                            <span class="mr-2">💖</span> Rizz Counter
+                            <span class="mr-2">😉</span> Rizz Counter
                         </a>
                     </li>
                     <li>
