@@ -5,13 +5,13 @@
 
 @section('content')
     <div class="md:col-span-2 flex flex-col space-y-8 h-full">
-        <!-- Hello, Alexander Card -->
+        <!-- Hello, User Card -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="bg-blue-600 text-white p-4 text-lg font-semibold rounded-t-lg">
-                Hello, Alexander
+                Hello, {{ Auth::user()->name }}
             </div>
             <div class="p-6 h-48">
-                <!-- Content for Hello, Alexander card -->
+                <!-- Content for Hello, User card -->
                 <p class="text-gray-700">Welcome to your dashboard! Here you can find an overview of your progress and important updates.</p>
             </div>
         </div>
