@@ -34,9 +34,35 @@
                 <div class="relative bg-purple-700 text-white p-4 text-lg font-semibold rounded-t-lg tab-arrow tab-arrow-active">
                     Grades
                 </div>
-                <div class="p-6 h-48">
-                    <!-- Content for Grades card -->
-                    <p class="text-gray-700">Your latest grades are now available.</p>
+                <div class="p-6 h-48 flex flex-col justify-center space-y-4">
+                    <div>
+                        <span class="font-semibold">Year 1:</span>
+                        <div class="w-full bg-gray-200 rounded-full h-4 mt-1 mb-1">
+                            <div class="bg-blue-500 h-4 rounded-full" style="width: {{ $avgYear1 ?? 0 }}%;"></div>
+                        </div>
+                        <span class="text-sm text-gray-700">{{ $avgYear1 ?? 0 }}%</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold">Year 2:</span>
+                        <div class="w-full bg-gray-200 rounded-full h-4 mt-1 mb-1">
+                            <div class="bg-blue-500 h-4 rounded-full" style="width: {{ $avgYear2 ?? 0 }}%;"></div>
+                        </div>
+                        <span class="text-sm text-gray-700">{{ $avgYear2 ?? 0 }}%</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold">Year 3:</span>
+                        <div class="w-full bg-gray-200 rounded-full h-4 mt-1 mb-1">
+                            <div class="bg-blue-500 h-4 rounded-full" style="width: {{ $avgYear3 ?? 0 }}%;"></div>
+                        </div>
+                        <span class="text-sm text-gray-700">{{ $avgYear3 ?? 0 }}%</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold">Year 4:</span>
+                        <div class="w-full bg-gray-200 rounded-full h-4 mt-1 mb-1">
+                            <div class="bg-blue-500 h-4 rounded-full" style="width: {{ $avgYear4 ?? 0 }}%;"></div>
+                        </div>
+                        <span class="text-sm text-gray-700">{{ $avgYear4 ?? 0 }}%</span>
+                    </div>
                 </div>
             </div>
         </div>
