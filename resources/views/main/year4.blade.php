@@ -1,3 +1,8 @@
+@php
+    $isTeacher = Auth::user()->role === 'teacher';
+    $feedbacks = session("year4_feedback", []);
+@endphp
+
 @extends('layouts.main-layout')
 
 @section('title', 'Year 4 Progress')
@@ -5,61 +10,118 @@
 @section('content')
     <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Year 4: Personal Leadership Progress</h1>
-
         <div class="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h2 class="text-xl font-semibold text-blue-800 mb-2">Competence Description:</h2>
-            <p class="text-gray-700 leading-relaxed">
-                You are entrepreneurial towards ICT assignments and your personal development. You pay attention towards your own ability to learn. You have a clear focus on what kind of ICT professional you want to become and/or what kind of professions you want to fulfill.
-            </p>
+            <!-- ... -->
         </div>
-
         <div class="flex-grow space-y-6 overflow-y-auto pr-2">
             @foreach($elementsProgress as $index => $element)
-                <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer"
-                     onclick="showModal({{ $index }})">
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $element['title'] }}</h3>
                     <p class="text-gray-600 text-sm mb-3">{{ $element['description'] }}</p>
-                    <div class="w-full bg-gray-200 rounded-full h-4 relative overflow-hidden">
-                        <div class="bg-blue-500 h-4 rounded-full transition-all duration-500 ease-out"
-                             style="width: {{ $element['progress'] }}%;">
+                    <div id="progress-bar-{{ $index }}">
+                        <div class="w-full bg-gray-200 rounded-full h-4 relative overflow-hidden">
+                            <div class="bg-blue-500 h-4 rounded-full transition-all duration-500 ease-out"
+                                 style="width: {{ $element['progress'] }}%;">
+                            </div>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
+                                  style="text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
+                                {{ $element['progress'] }}%
+                            </span>
                         </div>
-                        <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
-                              style="text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
-                            {{ $element['progress'] }}%
-                        </span>
+                        @if($isTeacher)
+                            <button type="button"
+                                    class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition"
+                                    onclick="showEdit({{ $index }})">
+                                Edit
+                            </button>
+                            <button type="button"
+                                    class="mt-2 ml-2 bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded transition"
+                                    onclick="showFeedback({{ $index }})">
+                                Feedback
+                            </button>
+                        @endif
                     </div>
+                    @if($isTeacher)
+                        <form id="edit-form-{{ $index }}" method="POST" action="{{ route('tasks.update', [4, $index]) }}"
+                              class="flex items-center space-x-2 mt-2 hidden">
+                            @csrf
+                            @method('PUT')
+                            <input type="number" name="progress" value="{{ $element['progress'] }}" min="0" max="100" class="w-20 border rounded px-2 py-1">
+                            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Save</button>
+                            <button type="button" class="bg-gray-400 text-white px-3 py-1 rounded" onclick="hideEdit({{ $index }})">Cancel</button>
+                        </form>
+                        <form id="feedback-form-{{ $index }}" method="POST" action="{{ route('tasks.feedback', [4, $index]) }}"
+                              class="flex items-center space-x-2 mt-2 hidden">
+                            @csrf
+                            <input type="text" name="feedback" value="{{ $feedbacks[$index] ?? '' }}" class="w-64 border rounded px-2 py-1" placeholder="Enter feedback...">
+                            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Save</button>
+                            <button type="button" class="bg-gray-400 text-white px-3 py-1 rounded" onclick="hideFeedback({{ $index }})">Cancel</button>
+                        </form>
+                        <!-- Feedback edit form (hidden by default) -->
+                        <form id="feedback-edit-form-{{ $index }}" method="POST" action="{{ route('tasks.feedback', [4, $index]) }}"
+                              class="flex items-center space-x-2 mt-2 hidden">
+                            @csrf
+                            <input type="text" name="feedback" value="{{ $feedbacks[$index] ?? '' }}" class="w-64 border rounded px-2 py-1" placeholder="Edit feedback...">
+                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded text-xs">Update</button>
+                            <button type="button" class="bg-gray-400 text-white px-2 py-1 rounded text-xs" onclick="hideFeedbackEdit({{ $index }})">Cancel</button>
+                        </form>
+                        <!-- Delete feedback form (hidden, submits empty feedback) -->
+                        <form id="feedback-delete-form-{{ $index }}" method="POST" action="{{ route('tasks.feedback', [4, $index]) }}" style="display:none;">
+                            @csrf
+                            <input type="hidden" name="feedback" value="">
+                        </form>
+                    @endif
+                    @if(isset($feedbacks[$index]) && $feedbacks[$index])
+                        <div class="mt-2 p-2 bg-blue-50 border-l-4 border-blue-400 text-blue-800 rounded flex items-center justify-between">
+                            <div>
+                                <strong>Feedback:</strong> {{ $feedbacks[$index] }}
+                            </div>
+                            @if($isTeacher)
+                                <div class="flex space-x-1 ml-2">
+                                    <button type="button" class="text-xs bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded"
+                                            onclick="showFeedbackEdit({{ $index }})" title="Edit feedback">
+                                        ✏️
+                                    </button>
+                                    <button type="button" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
+                                            onclick="deleteFeedback({{ $index }})" title="Delete feedback">
+                                        🗑️
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             @endforeach
         </div>
     </div>
 
-    {{-- Modal --}}
-    <div id="taskModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 hidden">
-        <div class="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full relative" onclick="event.stopPropagation()">
-            <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl" onclick="hideModal()">&times;</button>
-            <h2 id="modalTitle" class="text-2xl font-bold mb-4"></h2>
-            <p id="modalDescription" class="text-gray-700 mb-4"></p>
-            <div>
-                <span class="font-semibold">Progress:</span>
-                <span id="modalProgress" class="ml-2"></span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const elements = @json($elementsProgress);
-
-        function showModal(index) {
-            document.getElementById('modalTitle').textContent = elements[index].title;
-            document.getElementById('modalDescription').textContent = elements[index].description;
-            document.getElementById('modalProgress').textContent = elements[index].progress + '%';
-            document.getElementById('taskModal').classList.remove('hidden');
-        }
-
-        function hideModal() {
-            document.getElementById('taskModal').classList.add('hidden');
-        }
-
-        document.getElementById('taskModal').addEventListener('click', hideModal);
-    </script>
+    @if($isTeacher)
+        <script>
+            function showEdit(index) {
+                document.getElementById('progress-bar-' + index).style.display = 'none';
+                document.getElementById('edit-form-' + index).style.display = 'flex';
+            }
+            function hideEdit(index) {
+                document.getElementById('progress-bar-' + index).style.display = '';
+                document.getElementById('edit-form-' + index).style.display = 'none';
+            }
+            function showFeedback(index) {
+                document.getElementById('feedback-form-' + index).style.display = 'flex';
+            }
+            function hideFeedback(index) {
+                document.getElementById('feedback-form-' + index).style.display = 'none';
+            }
+            function showFeedbackEdit(index) {
+                document.getElementById('feedback-edit-form-' + index).style.display = 'flex';
+            }
+            function hideFeedbackEdit(index) {
+                document.getElementById('feedback-edit-form-' + index).style.display = 'none';
+            }
+            function deleteFeedback(index) {
+                if (confirm('Are you sure you want to delete this feedback?')) {
+                    document.getElementById('feedback-delete-form-' + index).submit();
+                }
+            }
+        </script>
+    @endif
 @endsection

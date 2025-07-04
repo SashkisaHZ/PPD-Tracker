@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\TaskProgressController;
 
 // Public routes
 Route::get('/', function () {
@@ -32,4 +33,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/year2', [Year2Controller::class, 'index']);
     Route::get('/year3', [Year3Controller::class, 'index']);
     Route::get('/year4', [Year4Controller::class, 'index']);
+
+    // Route for progress for teachers
+    Route::put('/tasks/{year}/{index}', [TaskProgressController::class, 'update'])->name('tasks.update');
+    // Feedback route for teachers
+    Route::post('/feedback/{year}/{index}', [TaskProgressController::class, 'feedback'])->name('tasks.feedback');
+
+    Route::post('/notifications/dismiss/{index}', function ($index) {
+        $notifications = session('notifications', []);
+        if (isset($notifications[$index])) {
+            unset($notifications[$index]);
+            session(['notifications' => array_values($notifications)]);
+        }
+        return back();
+    })->name('notifications.dismiss')->middleware('auth');
 });

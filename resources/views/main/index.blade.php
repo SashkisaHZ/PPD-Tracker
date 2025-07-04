@@ -23,9 +23,31 @@
                 <div class="relative bg-blue-600 text-white p-4 text-lg font-semibold rounded-t-lg tab-arrow tab-arrow-inactive">
                     Notifications
                 </div>
-                <div class="p-6 h-48">
-                    <!-- Content for Notifications card -->
-                    <p class="text-gray-700">You have no new notifications.</p>
+                <div class="p-6 h-48 overflow-y-auto"> {{-- Added overflow-y-auto for scrollable notifications --}}
+                    @php
+                        // Retrieve notifications from the session
+                        $notifications = session('notifications', []);
+                        // Reverse the array to show newest notifications first
+                        $notifications = array_reverse($notifications);
+                    @endphp
+
+                    @if (count($notifications) > 0)
+                        <ul class="space-y-2">
+                            @foreach ($notifications as $notification)
+                                <li class="bg-yellow-50 p-3 rounded-md shadow-sm border border-yellow-200 text-sm"> {{-- Changed to yellow background and border --}}
+                                    <p class="text-gray-800">{{ $notification['message'] }}</p>
+                                    <span class="text-gray-500 text-xs">{{ \Carbon\Carbon::parse($notification['timestamp'])->diffForHumans() }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        {{-- Optional: Add a button to clear notifications --}}
+                        {{-- <form action="{{ route('notifications.clear') }}" method="POST" class="mt-4 text-right">
+                            @csrf
+                            <button type="submit" class="text-blue-600 hover:underline text-sm">Clear Notifications</button>
+                        </form> --}}
+                    @else
+                        <p class="text-gray-700">You have no new notifications.</p>
+                    @endif
                 </div>
             </div>
 
