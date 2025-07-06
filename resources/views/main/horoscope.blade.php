@@ -34,7 +34,8 @@
                 "A creative idea will spark progress in your journey.",
                 "Someone close will offer valuable support today.",
                 "Take a bold step—fortune favors the brave.",
-                "Balance and harmony are within your reach."
+                "Balance and harmony are within your reach.",
+                "No, sorry.😔"
             ];
 
             document.getElementById('generate-btn').addEventListener('click', function() {

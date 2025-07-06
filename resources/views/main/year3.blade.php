@@ -1,43 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Year 3</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-blue-100 font-sans p-8">
+@php
+    $isTeacher = Auth::user()->role === 'teacher';
+    $feedbacks = session("year3_feedback", []);
+@endphp
 
-<div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+@extends('layouts.main-layout')
 
-    <!-- Sidebar -->
-    <div class="md:col-span-1 flex flex-col space-y-8">
-        <div class="bg-blue-600 rounded-lg shadow-md overflow-hidden">
-            <div class="bg-blue-700 text-white p-4 text-lg font-semibold rounded-t-lg">
-                PPD Progress
-            </div>
-            <nav>
-                <ul class="text-white">
-                    <li><a href="/year1" class="block p-4 bg-blue-600 hover:bg-blue-500 transition">Year 1</a></li>
-                    <li><a href="/year2" class="block p-4 bg-blue-600 hover:bg-blue-500 transition">Year 2</a></li>
-                    <li><a href="/year3" class="block p-4 bg-blue-600 hover:bg-blue-500 transition">Year 3</a></li>
-                    <li><a href="/year4" class="block p-4 bg-blue-600 hover:bg-blue-500 transition">Year 4</a></li>
-                    <li><a href="/rizz_counter_graph" class="block p-4 bg-blue-600 hover:bg-blue-500 transition">Rizz counter</a></li>
-                    <li><a href="/horoscope" class="block p-4 bg-blue-600 hover:bg-blue-500 rounded-b-lg transition">Horoscope</a></li>
-                </ul>
-            </nav>
+@section('title', 'Year 3 Progress')
+
+@section('content')
+    <div class="bg-white rounded-lg shadow-md p-6 h-full flex flex-col">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Year 3: Future-oriented Organizing Progress</h1>
+
+        <div class="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h2 class="text-xl font-semibold text-blue-800 mb-2">Competence Description:</h2>
+            <p class="text-gray-700 leading-relaxed">
+                You explore the organizational context of ICT assignments. You are capable of making rational, sustainable and ethical deliberations. You are also capable of managing all different aspects of an assignment.
+            </p>
         </div>
 
-        <button class="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md hover:bg-blue-500 text-lg font-semibold">
-            ENG/NL
-        </button>
+        <div class="flex-grow space-y-6 overflow-y-auto pr-2">
+            @foreach($elementsProgress as $index => $element)
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $element['title'] }}</h3>
+                    <p class="text-gray-600 text-sm mb-3">{{ $element['description'] }}</p>
+                    <div id="progress-bar-{{ $index }}">
+                        <div class="w-full bg-gray-200 rounded-full h-4 relative overflow-hidden">
+                            <div class="bg-blue-500 h-4 rounded-full transition-all duration-500 ease-out"
+                                 style="width: {{ $element['progress'] }}%;">
+                            </div>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
+                                  style="text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
+                                {{ $element['progress'] }}%
+                            </span>
+                        </div>
+                        @if($isTeacher)
+                            <button type="button"
+                                    class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition"
+                                    onclick="showEdit({{ $index }})">
+                                Edit
+                            </button>
+                            <button type="button"
+                                    class="mt-2 ml-2 bg-blue-400 hover:bg-blue-500 text-white px-3 py-1 rounded transition"
+                                    onclick="showFeedback({{ $index }})">
+                                Feedback
+                            </button>
+                        @endif
+                    </div>
+                    @if($isTeacher)
+                        <form id="edit-form-{{ $index }}" method="POST" action="{{ route('tasks.update', [3, $index]) }}"
+                              class="flex items-center space-x-2 mt-2 hidden">
+                            @csrf
+                            @method('PUT')
+                            <input type="number" name="progress" value="{{ $element['progress'] }}" min="0" max="100" class="w-20 border rounded px-2 py-1">
+                            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Save</button>
+                            <button type="button" class="bg-gray-400 text-white px-3 py-1 rounded" onclick="hideEdit({{ $index }})">Cancel</button>
+                        </form>
+                        <form id="feedback-form-{{ $index }}" method="POST" action="{{ route('tasks.feedback', [3, $index]) }}"
+                              class="flex items-center space-x-2 mt-2 hidden">
+                            @csrf
+                            <input type="text" name="feedback" value="{{ $feedbacks[$index] ?? '' }}" class="w-64 border rounded px-2 py-1" placeholder="Enter feedback...">
+                            <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Save</button>
+                            <button type="button" class="bg-gray-400 text-white px-3 py-1 rounded" onclick="hideFeedback({{ $index }})">Cancel</button>
+                        </form>
+                        <!-- Feedback edit form (hidden by default) -->
+                        <form id="feedback-edit-form-{{ $index }}" method="POST" action="{{ route('tasks.feedback', [3, $index]) }}"
+                              class="flex items-center space-x-2 mt-2 hidden">
+                            @csrf
+                            <input type="text" name="feedback" value="{{ $feedbacks[$index] ?? '' }}" class="w-64 border rounded px-2 py-1" placeholder="Edit feedback...">
+                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded text-xs">Update</button>
+                            <button type="button" class="bg-gray-400 text-white px-2 py-1 rounded text-xs" onclick="hideFeedbackEdit({{ $index }})">Cancel</button>
+                        </form>
+                        <!-- Delete feedback form (hidden, submits empty feedback) -->
+                        <form id="feedback-delete-form-{{ $index }}" method="POST" action="{{ route('tasks.feedback', [3, $index]) }}" style="display:none;">
+                            @csrf
+                            <input type="hidden" name="feedback" value="">
+                        </form>
+                    @endif
+                    @if(isset($feedbacks[$index]) && $feedbacks[$index])
+                        <div class="mt-2 p-2 bg-blue-50 border-l-4 border-blue-400 text-blue-800 rounded flex items-center justify-between">
+                            <div>
+                                <strong>Feedback:</strong> {{ $feedbacks[$index] }}
+                            </div>
+                            @if($isTeacher)
+                                <div class="flex space-x-1 ml-2">
+                                    <button type="button" class="text-xs bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded"
+                                            onclick="showFeedbackEdit({{ $index }})" title="Edit feedback">
+                                        ✏️
+                                    </button>
+                                    <button type="button" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
+                                            onclick="deleteFeedback({{ $index }})" title="Delete feedback">
+                                        🗑️
+                                    </button>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
     </div>
 
-    <!-- Main content -->
-    <div class="md:col-span-2">
-        <div class="bg-white rounded-lg shadow-md h-96"></div>
-    </div>
-
-</div>
-</body>
-</html>
+    @if($isTeacher)
+        <script>
+            function showEdit(index) {
+                document.getElementById('progress-bar-' + index).style.display = 'none';
+                document.getElementById('edit-form-' + index).style.display = 'flex';
+            }
+            function hideEdit(index) {
+                document.getElementById('progress-bar-' + index).style.display = '';
+                document.getElementById('edit-form-' + index).style.display = 'none';
+            }
+            function showFeedback(index) {
+                document.getElementById('feedback-form-' + index).style.display = 'flex';
+            }
+            function hideFeedback(index) {
+                document.getElementById('feedback-form-' + index).style.display = 'none';
+            }
+            function showFeedbackEdit(index) {
+                document.getElementById('feedback-edit-form-' + index).style.display = 'flex';
+            }
+            function hideFeedbackEdit(index) {
+                document.getElementById('feedback-edit-form-' + index).style.display = 'none';
+            }
+            function deleteFeedback(index) {
+                if (confirm('Are you sure you want to delete this feedback?')) {
+                    document.getElementById('feedback-delete-form-' + index).submit();
+                }
+            }
+        </script>
+    @endif
+@endsection

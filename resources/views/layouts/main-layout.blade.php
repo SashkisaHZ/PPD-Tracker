@@ -32,6 +32,10 @@
             align-items: center;
             margin-top: auto;
         }
+        .sidebar-link-active {
+            background-color: #1e40af !important;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="bg-blue-100 font-sans p-8">
@@ -48,12 +52,42 @@
             </div>
             <nav class="flex-grow">
                 <ul class="text-white">
-                    <li><a href="#" class="block p-4 hover:bg-blue-500 transition">Year 1</a></li>
-                    <li><a href="#" class="block p-4 hover:bg-blue-500 transition">Year 2</a></li>
-                    <li><a href="#" class="block p-4 hover:bg-blue-500 transition">Year 3</a></li>
-                    <li><a href="#" class="block p-4 hover:bg-blue-500 transition">Year 4</a></li>
-                    <li><a href="/rizz_counter_graph" class="block p-4 hover:bg-blue-500 transition">Rizz Counter</a></li>
-                    <li><a href="/horoscope" class="block p-4 hover:bg-blue-500 transition">Horoscope</a></li>
+                    <li>
+                        <a href="/year1"
+                           class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('year1') ? 'sidebar-link-active' : '' }}">
+                            <span class="mr-2">🤓</span> Year 1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/year2"
+                           class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('year2') ? 'sidebar-link-active' : '' }}">
+                            <span class="mr-2">📚</span> Year 2
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/year3"
+                           class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('year3') ? 'sidebar-link-active' : '' }}">
+                            <span class="mr-2">📈</span> Year 3
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/year4"
+                           class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('year4') ? 'sidebar-link-active' : '' }}">
+                            <span class="mr-2">🏆</span> Year 4
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/rizz_counter_graph"
+                           class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('rizz_counter_graph') ? 'sidebar-link-active' : '' }}">
+                            <span class="mr-2">😉</span> Rizz Counter
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/horoscope"
+                           class="block p-4 hover:bg-blue-500 transition flex items-center {{ request()->is('horoscope') ? 'sidebar-link-active' : '' }}">
+                            <span class="mr-2">🔮</span> Horoscope
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-bottom-section">
